@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="card {{ messages[0][1] }} text-white shadow"><div class="card-body">{{ messages[0][0] }}</div></div><hr>
+        {% endif %}
+    {% endwith %}
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Actualiza tu perfil</h6>
+                </div>
+                <div class="card-body">
+                    <form class="user" action="{{ url_for('auth.url_profile_post') }}" method="post">
+                        <div class="form-group">
+                            <input type="email"
+                                   name="email"
+                                   class="form-control form-control-user"
+                                   id="email"
+                                   required
+                                   aria-describedby="emailHelp"
+                                   value="{{ session['username'] }}"
+                                   readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text"
+                                   name="name"
+                                   class="form-control form-control-user"
+                                   id="name"
+                                   required
+                                   value="{{ profile.nombre }}"
+                                   aria-describedby="NombreHelp"
+                                   placeholder="Digita tu nombre...">
+                        </div>
+                        <div class="form-group">
+                            <input type="password"
+                                   name="password"
+                                   class="form-control form-control-user"
+                                   id="password"
+                                   value=""
+                                   placeholder="Digita tu contraseña...">
+                        </div>
+                        <button class="btn btn-primary btn-user btn-block">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Foto de perfil</h6>
+                </div>
+                <div class="card-body">
+                    <form class="user" action="{{ url_for('auth.url_profile_post') }}" method="post">
+                        <div class="form-group">
+                            <div class="text-center">
+                                <img class="img-profile rounded-circle"
+                                     src="https://images.vexels.com/media/users/3/140752/isolated/preview/17e31e592ab23bb0e8b2c0e76c0a4361-perfil-masculino-avatar-5-by-vexels.png"
+                                     width="50%">
+                            </div>
+                            <input type="file"
+                                   name="imagen"
+                                   class="form-control form-control-user"
+                                   id="imagen"
+                                   required style="padding:4px 0px 0px 13px">
+                        </div>
+                        <button class="btn btn-info btn-user btn-block">Subir</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

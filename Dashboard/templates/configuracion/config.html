@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Configuración API Twitter</h6>
+                </div>
+                <div class="card-body">
+                    <form class="user" action="{{ url_for('conf.url_config_tw_post') }}" method="post">
+                        <div class="form-group">
+                            <h3 class="small font-weight-bold">API key</h3>
+                            <input type="text"
+                                   name="apikey"
+                                   class="form-control form-control-user"
+                                   id="apikey"
+                                   required
+                                   value="{{ config.API_key_tw }}"
+                                   aria-describedby="NombreHelp"
+                                   placeholder="Digita tu API key...">
+                        </div>
+                        <div class="form-group">
+                            <h3 class="small font-weight-bold">API secret key</h3>
+                            <input type="text"
+                                   name="apisecretkey"
+                                   class="form-control form-control-user"
+                                   id="apisecretkey"
+                                   required
+                                   value="{{ config.API_secret_key_tw }}"
+                                   placeholder="Digita tu API secret key...">
+                        </div>
+                        <div class="form-group">
+                            <h3 class="small font-weight-bold">Cantidad de Twetts</h3>
+                            <input type="text"
+                                   name="Cantidad_data_tw"
+                                   class="form-control form-control-user"
+                                   id="Cantidad_data_tw"
+                                   required
+                                   value="{{ config.Cantidad_data_tw }}"
+                                   placeholder="Digita Cantidad_data_tw...">
+                        </div>
+                        <button class="btn btn-primary btn-user btn-block">Guardar</button>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <hr>
+                                <div class="card {% if messages[0][0]=='0' %}bg-danger{% endif %}{% if messages[0][0]=='1' %}bg-success{% endif %} text-white shadow">
+                                    <div class="card-body">{{ messages[0][1] }}</div>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
