@@ -114,20 +114,20 @@ AUTO_INCREMENT = 20;
 
 
 -- Dump data of "conf" -------------------------------------
-/*!40000 ALTER TABLE `conf` DISABLE KEYS */
+/*!40000 ALTER TABLE `conf` DISABLE KEYS*/;
 
 BEGIN;
 
 INSERT INTO `conf`(`id`,`API_key_tw`,`API_secret_key_tw`,`Cantidad_data_tw`) VALUES 
 ( '1', 'F70Tuo2dL0e08mgLU7QTSP9R9', 'I8jKWmBnq2qOlGVnRKintRztIL79q53YDmMUZV5phWpKW9SnBP', '100' );
 COMMIT;
-/*!40000 ALTER TABLE `conf` ENABLE KEYS */
+/*!40000 ALTER TABLE `conf` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
 
 -- Dump data of "cuentas" ----------------------------------
-/*!40000 ALTER TABLE `cuentas` DISABLE KEYS */
+/*!40000 ALTER TABLE `cuentas` DISABLE KEYS */;
 
 BEGIN;
 
@@ -136,13 +136,13 @@ INSERT INTO `cuentas`(`id`,`cuenta`,`red_social`,`create`,`update`) VALUES
 ( '699', '42xys', '1', NULL, NULL ),
 ( '702', 'ElNegrovicto', '1', NULL, NULL );
 COMMIT;
-/*!40000 ALTER TABLE `cuentas` ENABLE KEYS */
+/*!40000 ALTER TABLE `cuentas` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
 
 -- Dump data of "data_twitter" -----------------------------
-/*!40000 ALTER TABLE `data_twitter` DISABLE KEYS */
+/*!40000 ALTER TABLE `data_twitter` DISABLE KEYS */;
 
 BEGIN;
 
@@ -151,13 +151,13 @@ INSERT INTO `data_twitter`(`id`,`screen_name`,`name`,`location`,`description`) V
 ( '15632696', '42xys', 'Juan David', 'Montería', 'Todo lo que escriba aquí puede ser usado en mi contra.' ),
 ( '92553187', 'Raxielh', 'Rodrigo Garcia Hoyos', 'ÜT: 8.763011,-75.875684', 'Doctorate Student.  His research interest includes Artificial Intelligence, Machine Learning, Web Programming, Autonomic Computing, and Smart Environments.' );
 COMMIT;
-/*!40000 ALTER TABLE `data_twitter` ENABLE KEYS */
+/*!40000 ALTER TABLE `data_twitter` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
 
 -- Dump data of "data_twitter_detalle" ---------------------
-/*!40000 ALTER TABLE `data_twitter_detalle` DISABLE KEYS */
+/*!40000 ALTER TABLE `data_twitter_detalle` DISABLE KEYS */;
 
 BEGIN;
 
@@ -553,13 +553,13 @@ INSERT INTO `data_twitter_detalle`(`id`,`usuario`,`text`,`place_type`,`place`,`s
 
 No existe…', '', '', '0.5', '0.5', 'neg', '0.10101', '0.89899' );
 COMMIT;
-/*!40000 ALTER TABLE `data_twitter_detalle` ENABLE KEYS */
+/*!40000 ALTER TABLE `data_twitter_detalle` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
 
 -- Dump data of "redes_sociales" ---------------------------
-/*!40000 ALTER TABLE `redes_sociales` DISABLE KEYS */
+/*!40000 ALTER TABLE `redes_sociales` DISABLE KEYS */;
 
 BEGIN;
 
@@ -568,13 +568,13 @@ INSERT INTO `redes_sociales`(`id`,`nombre`,`create`,`update`) VALUES
 ( '2', 'Facebook', '2020-07-28 19:51:09', '2020-07-28 19:51:09' ),
 ( '3', 'Instagram', '2020-07-28 19:51:17', '2020-07-28 19:51:17' );
 COMMIT;
-/*!40000 ALTER TABLE `redes_sociales` ENABLE KEYS */
+/*!40000 ALTER TABLE `redes_sociales` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
 
 -- Dump data of "users_sis" --------------------------------
-/*!40000 ALTER TABLE `users_sis` DISABLE KEYS */
+/*!40000 ALTER TABLE `users_sis` DISABLE KEYS */;
 
 BEGIN;
 
@@ -587,7 +587,7 @@ INSERT INTO `users_sis`(`id`,`nombre`,`correo`,`password`) VALUES
 ( '18', 'rodrigo', 'rodrigo@gmail.com88', 'SAsvGnJ7itXgk' ),
 ( '19', 'rodrigo', 'rodrigo99@gmail.com', 'SAsvGnJ7itXgk' );
 COMMIT;
-/*!40000 ALTER TABLE `users_sis` ENABLE KEYS */
+/*!40000 ALTER TABLE `users_sis` ENABLE KEYS */;
 
 -- ---------------------------------------------------------
 
