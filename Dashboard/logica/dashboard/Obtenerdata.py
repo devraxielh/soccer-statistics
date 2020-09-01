@@ -18,12 +18,15 @@ def get_all_tweets(screen_name, limit_number):
     alltweets = []
     new_tweets = api.user_timeline(screen_name=screen_name,count=1)
     alltweets.extend(new_tweets)
+    
+    # Si no hay tweets en la cuenta, no hacer nada
+    if not new_tweets:
+        diccionario = {'estados': '202', 'msg':"Terminado"}
+        return json.dumps(diccionario)
+
     oldest = alltweets[-1].id - 1
 
-    while len(new_tweets) > 0 and len(alltweets) <= limit_number:
-        new_tweets = api.user_timeline(screen_name=screen_name, count=1, max_id=oldest)
-        bd, connection = getConnection()
-        emoji_pattern = re.compile("["
+    emoji_pattern = re.compile("["
                                    u"\U0001F600-\U0001F64F"  # emoticons
                                    u"\U0001F300-\U0001F5FF"  # symbols & pictographs
                                    u"\U0001F680-\U0001F6FF"  # transport & map symbols
@@ -44,9 +47,16 @@ def get_all_tweets(screen_name, limit_number):
                                    u"\u3030"
                                    "]+", flags=re.UNICODE)
 
-        texto = emoji_pattern.sub(r'', new_tweets[0]._json['text'])
-        texto = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', texto)
+    texto = emoji_pattern.sub(r'', new_tweets[0]._json['text'])
+    texto = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', texto)
 
+    descripcion = emoji_pattern.sub(r'', new_tweets[0]._json['user']['description'])
+    descripcion = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', descripcion)
+
+    while len(new_tweets) > 0 and len(alltweets) <= limit_number:
+        new_tweets = api.user_timeline(screen_name=screen_name, count=1, max_id=oldest)
+        bd, connection = getConnection()
+        
         sql = "SELECT * FROM data_twitter WHERE id=%s"
         bd.execute(sql, (new_tweets[0]._json['user']['id_str']))
         data = bd.fetchone()
@@ -54,13 +64,13 @@ def get_all_tweets(screen_name, limit_number):
         if data:
             sql = "UPDATE data_twitter SET screen_name=%s,name=%s,location=%s,description=%s WHERE id = %s"
             bd.execute(sql, (new_tweets[0]._json['user']['screen_name'], new_tweets[0]._json['user']['name'],
-                             new_tweets[0]._json['user']['location'], new_tweets[0]._json['user']['description'],
+                             new_tweets[0]._json['user']['location'], descripcion,
                              new_tweets[0]._json['user']['id_str']))
         else:
             sql = "INSERT INTO data_twitter VALUES (%s, %s, %s, %s, %s)"
             bd.execute(sql, (new_tweets[0]._json['user']['id_str'], new_tweets[0]._json['user']['screen_name'],
                              new_tweets[0]._json['user']['name'], new_tweets[0]._json['user']['location'],
-                             new_tweets[0]._json['user']['description']))
+                             descripcion))
 
         connection.commit()
 
@@ -95,12 +105,12 @@ def get_all_tweets(screen_name, limit_number):
                 analysis = TextBlob(tweet.text)
                 analysis2 = tb(tweet.text)
                 # https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
-                analysis = analysis.sentiment
+                analysis = analysis.sentiment   
                 polarity = analysis.polarity
                 polarity_list.append(polarity)
                 numbers_list.append(number)
                 number = number + 1
-                sql = "UPDATE data_twitter_detalle SET polarity=%s,sentiment=%s ,classification=%s ,p_pos=%s ,p_neg=%s WHERE id = %s"
+                sql = "UPDATE data_twitter_detalle SET polarity=%s,subjectivity=%s ,classification=%s ,p_pos=%s ,p_neg=%s WHERE id = %s"
                 bd.execute(sql, (analysis.polarity,analysis.subjectivity,analysis2.sentiment.classification,analysis2.sentiment.p_pos,analysis2.sentiment.p_neg,tweet.id))
                 connection.commit()
             except tweepy.TweepError as e:

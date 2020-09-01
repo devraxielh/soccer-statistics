@@ -52,7 +52,7 @@ $(function() {
                 tabla_places(data);
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
-                console.log( "La solicitud a fallado: " +  textStatus + " "+ errorThrown);
+                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
 
     });

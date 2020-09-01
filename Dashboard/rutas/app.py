@@ -20,6 +20,10 @@ def url_obtenerdata_twitter():
 def url_mostrardata_twitter():
     return MostrarAnalisisTwitter_Polaridad()
 
+@app.route('/mostrardata_Subjetividad/twitter', methods=['POST'])
+def url_mostrardata_twitter():
+    return MostrarAnalisisTwitter_Subjetividad()
+
 @app.route('/mostrardata_visitas/twitter', methods=['POST'])
 def url_mostrar_visitas_twitter():
     return MostrarAnalisisTwitter_Visitas()
