@@ -17,11 +17,11 @@ def url_obtenerdata_twitter():
     return obtenerdata_twitter()
 
 @app.route('/mostrardata_Polaridad/twitter', methods=['POST'])
-def url_mostrardata_twitter():
+def url_mostrardata_twitter_polaridad():
     return MostrarAnalisisTwitter_Polaridad()
 
 @app.route('/mostrardata_Subjetividad/twitter', methods=['POST'])
-def url_mostrardata_twitter():
+def url_mostrardata_twitter_subjetividad():
     return MostrarAnalisisTwitter_Subjetividad()
 
 @app.route('/mostrardata_visitas/twitter', methods=['POST'])
