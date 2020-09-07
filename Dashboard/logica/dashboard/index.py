@@ -1,6 +1,7 @@
 from flask import render_template, redirect, url_for, session,request,flash,json
 from Dashboard.conexion import getConnection
 from Dashboard.logica.dashboard.Obtenerdata import get_all_tweets
+from tweepy import TweepError
 
 def home():
     if not session:
@@ -76,4 +77,12 @@ def obtenerdata_twitter():
     sql = "SELECT Cantidad_data_tw FROM conf where id=1"
     bd.execute(sql)
     cantidad = bd.fetchone()
-    return get_all_tweets(cuenta,cantidad['Cantidad_data_tw'])
+    tweets = json.dumps({"estados": "304", "mensaje": "Sin cambios"})
+    try:
+        tweets = get_all_tweets(cuenta, cantidad['Cantidad_data_tw'])
+    except TweepError as ex:
+        if ex.reason == "Not authorized.":
+            print("La cuenta tiene todos sus tweets protegidos")
+            tweets = json.dumps({"estados": "401","mensaje": "Error, los tuits de esta cuenta estan protegidos"})
+    
+    return tweets

@@ -95,7 +95,7 @@ CREATE TABLE `data_twitter` (
 
 LOCK TABLES `data_twitter` WRITE;
 /*!40000 ALTER TABLE `data_twitter` DISABLE KEYS */;
-INSERT INTO `data_twitter` VALUES ('1070353721291358208','dani_mesen','Dani Mesén','Heredia, Costa Rica','Jugadora Primera División Liga Deportiva Alajuelense \nInsta: dani_mesen16'),('155659213','Cristiano','Cristiano Ronaldo','Turim, Piemonte','This Privacy Policy addresses the collection and use of personal information - https://t.co/Jp6yh1T58c'),('720268798490578946','valerySandoval0','Valery Sandoval','Alajuela, Costa Rica','19 años,futbolista •Primera división L.D.A •Seleccionada nacional Sub20 ');
+INSERT INTO `data_twitter` VALUES ('1070353721291358208','dani_mesen','Dani Mesén','Heredia, Costa Rica','Jugadora Primera División Liga Deportiva Alajuelense \nInsta: dani_mesen16'),('1242268165','vale_delca','Valeria Del Campo','Costa Rica','Selection of Costa Rica || Instagram: vale_delca || Deut. 31: 6 || Saprissa FF || UCR'),('1294457013393645574','Nicole_gg09','Nicole Gómez','','Insta: nicole_gg09\nLDA primera división\nSelección Nacional sub 20'),('1297237436716724225','Yerlin_Ovares11','Yerlin Ovares','','Player of the Sport Herediano Club and National Sub 20 Selected'),('1368220597','ElNegrovicto','El negro victor','Montería, Colombia','Periodista cívico independiente de carácter critico, No hago bulto ni soy arrodillado, Director del portal https://t.co/njGvtFceP4'),('155659213','Cristiano','Cristiano Ronaldo','Turim, Piemonte','This Privacy Policy addresses the collection and use of personal information - https://t.co/Jp6yh1T58c'),('720268798490578946','valerySandoval0','Valery Sandoval','Alajuela, Costa Rica','19 years old, soccer player • First division L.D.A • National U20 team selected');
 /*!40000 ALTER TABLE `data_twitter` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,11 +112,11 @@ CREATE TABLE `data_twitter_detalle` (
   `text` text,
   `place_type` varchar(99) DEFAULT NULL,
   `place` varchar(200) DEFAULT NULL,
-  `subjectivity` float(12,0) DEFAULT NULL,
-  `polarity` float(12,0) DEFAULT NULL,
+  `subjectivity` decimal(10,2) DEFAULT NULL,
+  `polarity` decimal(10,2) DEFAULT NULL,
   `classification` varchar(90) DEFAULT NULL,
-  `p_pos` float(12,0) DEFAULT NULL,
-  `p_neg` float(12,0) DEFAULT NULL,
+  `p_pos` decimal(10,2) DEFAULT NULL,
+  `p_neg` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -127,7 +127,7 @@ CREATE TABLE `data_twitter_detalle` (
 
 LOCK TABLES `data_twitter_detalle` WRITE;
 /*!40000 ALTER TABLE `data_twitter_detalle` DISABLE KEYS */;
-INSERT INTO `data_twitter_detalle` VALUES ('1293546832098926592','155659213','Happy to share these beautiful moments with you!  ','','',NULL,NULL,NULL,NULL,NULL),('1296275009858658304','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'neg',0,1),('1297006616676642816','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',1,0),('1297232916548915201','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',1,0),('1297305850193874946','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1297305862713868289','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'neg',0,1),('1297305878153039874','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1297305903729971201','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1297305920280698880','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1298384854258679809','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1298826714546610177','720268798490578946','Una de las fotos que más significado tienen en mi vida!! \nFeliz cumpleaños Capi,gracias por darnos tanto y llenarno… ','','',0,0,'pos',0,0),('1299419554850971651','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',1,0),('1299490633057476608','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0),('1299495288219070465','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0),('1299682804016599040','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',1,-1,'neg',0,1),('1299804973384040453','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',1,0),('1299841975105978368','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',1,0),('1299859457590136835','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0),('1299866097655656448','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0),('1299869343065440257','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0),('1300135453258067968','1070353721291358208','@IvonneR64760473\nEsa es mi capitana\nLove u princess ','','',0,0,'pos',0,0);
+INSERT INTO `data_twitter_detalle` VALUES ('1296865905490657280','1242268165','RT @SaprissaOficial: We are fed up ... https://t.co/jZTT5cjVxi','admin','Alajuela',0.50,0.50,'neg',0.39,0.61),('1296872551797399552','1242268165','@DiegoPicadoV Mmm no no','admin','Alajuela',0.00,0.00,'pos',0.50,0.50),('1297227076433588224','1242268165','RT @ KevinVR1998: If there was a story I wanted to write about for a long time, it was this','','',0.40,-0.05,'neg',0.31,0.69),('1298028691394633729','1242268165','RT @SaprissaOficial: 1, 2, 3, 4 These were the four entries of #SaprissaFF in his game yesterday #VamosMoradas!','','',0.40,-0.50,'pos',0.86,0.14),('1298067539361226752','1242268165','RT @fedefutbolcrc: The women\'s U-20 national team has not stopped and this Monday started its fifth week of training, with m…','','',0.00,0.00,'neg',0.12,0.88),('1299399347050811401','1242268165','RT @SaprissaOficial: #VamosMoradas','','',0.00,0.00,'pos',0.50,0.50),('1299574399054610433','1242268165','RT @SaprissaOficial: After 10 months of recovery the player Sofía Varela is today on the substitute list. @ sofi_vares98 ...','','',0.00,0.00,'pos',0.98,0.02),('1300145253119406080','1242268165','@DiegoPicadoV HAHA oh yes he exaggerates','admin','Alajuela',0.30,0.20,'pos',0.70,0.30),('1300882641718325249','1242268165','@ameliarueda @DiegoPicadoV','admin','Alajuela',0.00,0.00,'pos',0.50,0.50),('1301668421919272960','1242268165','RT @SaprissaOficial: Tomorrow Saprissa will play Women\'s Soccer\n\nThe match will be against Dimas Escazú at 7 p.m. in La Cueva and will be transmitted ...','','',0.00,0.00,'pos',0.79,0.21),('1302361120217477120','1242268165','RT @SaprissaOficial: We are fed up ...','','',0.00,0.00,'pos',0.58,0.42);
 /*!40000 ALTER TABLE `data_twitter_detalle` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -193,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-03 10:19:27
+-- Dump completed on 2020-09-07  3:50:00

@@ -3,6 +3,7 @@ from flask import Flask
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
 
     from Dashboard.rutas.auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)

@@ -1,6 +1,7 @@
 from flask import json,redirect,url_for,session,flash,request
 from Dashboard.conexion import getConnection
 
+
 def MostrarAnalisisTwitter_Polaridad():
     screen_name = request.form.get('cuenta')
     if not session:
@@ -18,7 +19,7 @@ def MostrarAnalisisTwitter_Polaridad():
 
 def MostrarAnalisisTwitter_Subjetividad():
     '''
-        TO DO: Leer documentación de TextBlob y la clase Blobber
+    TO DO: Leer documentación de TextBlob y la clase Blobber
     '''
     screen_name = request.form.get('cuenta')
     if not session:
