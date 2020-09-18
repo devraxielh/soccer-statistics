@@ -56,6 +56,15 @@ $(function() {
                 console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
 
+            .done(function( data, textStatus, jqXHR ) {
+                $("#load").hide();
+                $("#details").show();
+                graficar_frecuencias(data);
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
+            });
+
         $.ajax({
             data: {"cuenta" : $( "#red_social" ).val()},
             type: "POST",
@@ -69,14 +78,11 @@ $(function() {
             .fail(function( jqXHR, textStatus, errorThrown ) {
                 console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
-
     });
-
 
 });
 
 function graficar_frecuencias(data) {
-    console.log("Data: ", data)
     var dataTable = data.map(item => [String(item.freq), item.subjectivity])
 
     google.charts.load('current', {'packages':['corechart']});
@@ -113,7 +119,6 @@ function graficar_pie_char(data){
         chart.draw(data, options);
     }
 }
-
 
 function removeItemFromArr ( arr, item ) {
     var i = arr.indexOf( item );

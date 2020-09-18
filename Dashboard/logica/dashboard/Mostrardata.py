@@ -22,6 +22,21 @@ def MostrarAnalisisTwitter_Polaridad():
 
     return json.dumps(detalle)
 
+def MostrarAnalisisTwitter_Menciones():
+    screen_name = request.form.get('cuenta')
+    if not session:
+        return redirect(url_for('auth.url_login'))
+
+    try:
+        bd, connection = getConnection()
+        sql = "SELECT classification, count(*) as c FROM(SELECT screen_name FROM CitizenLab.data_twitter WHERE screen_name = '"+screen_name+"') as J1 JOIN data_twitter_detalle ON J1.screen_name=data_twitter_detalle.is_mentioned group by classification LIMIT 0, 1000"
+        bd.execute(sql)
+        detalle=bd.fetchall()
+    except Exception as e:
+        detalle = str(e)
+
+    return json.dumps(detalle)
+
 def MostrarAnalisisTwitter_Subjetividad():
     '''
     TO DO: Leer documentación de TextBlob y la clase Blobber
