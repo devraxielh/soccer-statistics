@@ -5,6 +5,7 @@ from textblob.sentiments import NaiveBayesAnalyzer
 tb = Blobber(analyzer=NaiveBayesAnalyzer())
 from Dashboard.conexion import getConnection
 from googletrans import Translator
+import pprint
 import re
 consumer_key = "F70Tuo2dL0e08mgLU7QTSP9R9"
 consumer_secret = "I8jKWmBnq2qOlGVnRKintRztIL79q53YDmMUZV5phWpKW9SnBP"
@@ -49,6 +50,7 @@ def get_all_tweets(screen_name, limit_number):
                                    u"\u3030"
                                    "]+", flags=re.UNICODE)
 
+    bd, connection = getConnection()
     while len(new_tweets) > 0 and len(alltweets) <= limit_number:
 
         texto = emoji_pattern.sub(r'', new_tweets[0]._json['text'])
@@ -59,7 +61,6 @@ def get_all_tweets(screen_name, limit_number):
         descripcion = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', descripcion)
         descripcion = traductor.translate(descripcion, src="es", dest='en').text
 
-        bd, connection = getConnection()
         sql = "SELECT * FROM data_twitter WHERE id=%s"
         bd.execute(sql, (new_tweets[0]._json['user']['id_str']))
         data = bd.fetchone()
@@ -106,7 +107,10 @@ def get_all_tweets(screen_name, limit_number):
 
     for tweet in alltweets:
         try:
-            text = traductor.translate(tweet.text, src="es", dest='en').text
+            text = emoji_pattern.sub(r'', tweet._json['text'])
+            text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text)
+            text = traductor.translate(text, src="es", dest='en').text
+            
             analysis = TextBlob(text)
             analysis2 = tb(text)
             # https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
@@ -117,24 +121,35 @@ def get_all_tweets(screen_name, limit_number):
             numbers_list.append(number)
             number = number + 1
             sql = "SELECT * FROM data_twitter_detalle WHERE id=%s"
-            bd.execute(sql, (new_tweets[0]._json['id_str']))
+            bd.execute(sql, (tweet._json['id_str']))
             test = bd.fetchone()
             if test:
                 sql = "UPDATE data_twitter_detalle SET polarity=%s,subjectivity=%s ,classification=%s ,p_pos=%s ,p_neg=%s WHERE id = %s"
                 bd.execute(sql, (polarity, subjectivity, analysis2.sentiment.classification,analysis2.sentiment.p_pos,analysis2.sentiment.p_neg, tweet.id))     
             else:
                 sql = "INSERT INTO data_twitter_detalle VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
-                bd.execute(sql, (new_tweets[0]._json['id_str'],
-                                new_tweets[0]._json['user']['id_str'],
+                if (tweet._json['place']):
+                    bd.execute(sql, (tweet._json['id_str'],
+                                tweet._json['user']['id_str'],
                                 text,
-                                new_tweets[0]._json['place']['place_type'],
-                                new_tweets[0]._json['place']['name'],
+                                tweet._json['place']['place_type'],
+                                tweet._json['place']['name'],
                                 polarity,
                                 subjectivity,
                                 analysis2.sentiment.classification,
                                 analysis2.sentiment.p_pos,
                                 analysis2.sentiment.p_neg))
-
+                else:
+                    bd.execute(sql, (tweet._json['id_str'],
+                                tweet._json['user']['id_str'],
+                                text,
+                                "",
+                                "",
+                                polarity,
+                                subjectivity,
+                                analysis2.sentiment.classification,
+                                analysis2.sentiment.p_pos,
+                                analysis2.sentiment.p_neg))
             connection.commit()
         except tweepy.TweepError as e:
             print(e.reason)

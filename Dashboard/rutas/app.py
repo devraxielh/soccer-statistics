@@ -1,6 +1,6 @@
 from flask import Blueprint,render_template,redirect,url_for,session,request,json
 from Dashboard.logica.dashboard.index import home,obtenerdata_twitter
-from Dashboard.logica.dashboard.Mostrardata import MostrarAnalisisTwitter_Polaridad,MostrarAnalisisTwitter_Visitas
+from Dashboard.logica.dashboard.Mostrardata import MostrarAnalisisTwitter_Polaridad, MostrarAnalisisTwitter_Subjetividad, MostrarAnalisisTwitter_Visitas
 
 app = Blueprint('app', __name__)
 

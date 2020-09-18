@@ -1,6 +1,6 @@
 $(function() {
 
-    $("#detalis").hide();
+    $("#details").hide();
 
     $( "#obtener" ).click(function() {
 
@@ -17,7 +17,7 @@ $(function() {
                 $("#load").hide();
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
-                console.log( "La solicitud a fallado: " +  textStatus + " "+ errorThrown);
+                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
 
     });
@@ -34,11 +34,26 @@ $(function() {
         })
             .done(function( data, textStatus, jqXHR ) {
                 $("#load").hide();
-                $("#detalis").show();
+                $("#details").show();
                 graficar_pie_char(data);
             })
             .fail(function( jqXHR, textStatus, errorThrown ) {
-                console.log( "La solicitud a fallado: " +  textStatus + " "+ errorThrown);
+                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
+            });
+
+        $.ajax({
+            data: {"cuenta" : $( "#red_social" ).val()},
+            type: "POST",
+            dataType: "json",
+            url: "http://127.0.0.1:5000/mostrardata_Subjetividad/twitter",
+        })
+            .done(function( data, textStatus, jqXHR ) {
+                $("#load").hide();
+                $("#details").show();
+                graficar_frecuencias(data);
+            })
+            .fail(function( jqXHR, textStatus, errorThrown ) {
+                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
 
         $.ajax({
@@ -59,6 +74,23 @@ $(function() {
 
 
 });
+
+function graficar_frecuencias(data) {
+    console.log("Data: ", data)
+    var dataTable = data.map(item => [String(item.freq), item.subjectivity])
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {        
+        var data = google.visualization.arrayToDataTable([["Frecuencia", "Subjetividad"]].concat(dataTable));
+        var options = {title:''};
+        var chart = new google.visualization.Histogram(document.getElementById('histogram'))
+        chart.draw(data, options);
+    }
+
+
+}
 
 function graficar_pie_char(data){
     var neg = data[0].c/data[0].total;
@@ -81,6 +113,7 @@ function graficar_pie_char(data){
         chart.draw(data, options);
     }
 }
+
 
 function removeItemFromArr ( arr, item ) {
     var i = arr.indexOf( item );
