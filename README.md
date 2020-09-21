@@ -1,6 +1,6 @@
 # Soccer Statistics
 
-Soccer Statistics
+Sentiment Analysis made over soccer statistics.
 
 # Installation (Linux)
 
@@ -12,15 +12,20 @@ Soccer Statistics
 
 3 .- Add a new Database named `CitizenLab`.
 
-4 .- Load `CitizenLab_20200807_170139.sql` into your database.
+4 .- Load `CitizenLab_XXXXXXX.sql` into your database.
 
-
-## Project Setup
+## Project Setup (Development)
 
 1.- Install Flask `~$ pip install flask`
 
-2.- Set up flask initial config `~$ export FLASK_APP=Dashboard`
+2.- Set up flask initial config `~$ export FLASK_APP=Dashboard` and `~$ export FLASK_ENV=development`.
 
 3.- Load required packages `~$ pip install -r requirements.txt`
 
 4.- Run app using `~$ flask run`
+
+# Pending tasks
+
+- [ ] Correlation Analysis using real data.
+- [ ] Solve Matplotlib issue during Dockerization.
+- [ ] Docker deployment into selected cloud service.

@@ -32,9 +32,32 @@ def get_correlation(screen_name):
     plt.xticks(range(len(df.columns)), df.columns)
     plt.yticks(range(len(df.columns)), df.columns)
     plt.colorbar()
-    
-    send_file(plt, mimetype='image/gif')
+    fig, ax = plt.subplots()
+    draw(ax)
+    return fig_response(fig)
 
+def get_correlation(screen_name):
+    fig, ax = plt.subplots()
+    draw(ax)
+    return fig_response(fig)
+
+def fig_response(fig):
+    """Turn a matplotlib Figure into Flask response"""
+    img_bytes = BytesIO()
+    fig.savefig(img_bytes)
+    img_bytes.seek(0)
+    return send_file(img_bytes, mimetype='image/png')
+
+
+def filter_text(texto="", emoji_pattern="", traductor={}):
+    ret_val = emoji_pattern.sub(r'', texto)
+    ret_val = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', ret_val)
+
+    if ( len(ret_val.strip()) == 0 or ret_val is None):  
+        return ""
+    
+    ret_val = traductor.translate(ret_val, src="es", dest='en').text
+    return ret_val
 
 
 def get_all_tweets(screen_name, limit_number):
@@ -78,13 +101,8 @@ def get_all_tweets(screen_name, limit_number):
     bd, connection = getConnection()
     while len(new_tweets) > 0 and len(alltweets) <= limit_number:
 
-        texto = emoji_pattern.sub(r'', new_tweets[0]._json['text'])
-        texto = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', texto)
-        texto = traductor.translate(texto, src="es", dest='en').text
-
-        descripcion = emoji_pattern.sub(r'', new_tweets[0]._json['user']['description'])
-        descripcion = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', descripcion)
-        descripcion = traductor.translate(descripcion, src="es", dest='en').text
+        texto = filter_text(new_tweets[0]._json['text'], emoji_pattern, traductor)
+        descripcion = filter_text(new_tweets[0]._json['user']['description'], emoji_pattern, traductor)
 
         sql = "SELECT * FROM data_twitter WHERE id=%s"
         bd.execute(sql, (new_tweets[0]._json['user']['id_str']))
@@ -111,12 +129,16 @@ def get_all_tweets(screen_name, limit_number):
             sql = "UPDATE data_twitter_detalle SET text=%s WHERE id=%s"
             bd.execute(sql, (texto, new_tweets[0]._json['id_str']))
         else:
-            sql = "INSERT INTO data_twitter_detalle VALUES (%s, %s, %s, %s, %s,NULL,NULL,NULL,NULL,NULL)"
+            sql = "INSERT INTO data_twitter_detalle VALUES (%s, %s, %s, %s, %s, %s,NULL,NULL,NULL,NULL,NULL,NULL)"
             if (new_tweets[0]._json['place']):
-                bd.execute(sql, (new_tweets[0]._json['id_str'], new_tweets[0]._json['user']['id_str'], texto,
-                                 new_tweets[0]._json['place']['place_type'], new_tweets[0]._json['place']['name']))
+                bd.execute(sql, (new_tweets[0]._json['id_str'], 
+                                new_tweets[0]._json['user']['id_str'], 
+                                texto,
+                                new_tweets[0]._json['created_at'], 
+                                new_tweets[0]._json['place']['place_type'], 
+                                new_tweets[0]._json['place']['name']))
             else:
-                bd.execute(sql, (new_tweets[0]._json['id_str'], new_tweets[0]._json['user']['id_str'], texto, "", ""))
+                bd.execute(sql, (new_tweets[0]._json['id_str'], new_tweets[0]._json['user']['id_str'], texto, new_tweets[0]._json['created_at'], "", ""))
 
         connection.commit()
         new_tweets = api.user_timeline(screen_name=screen_name, count=1, max_id=oldest)
@@ -139,9 +161,7 @@ def get_all_tweets(screen_name, limit_number):
 
     for tweet in alltweets:
         try:
-            text = emoji_pattern.sub(r'', tweet._json['text'])
-            text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text)
-            text = traductor.translate(text, src="es", dest='en').text
+            text = filter_text(tweet._json['text'], emoji_pattern, traductor)
             analysis = TextBlob(text)
             analysis2 = tb(text)
             # https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
@@ -158,30 +178,34 @@ def get_all_tweets(screen_name, limit_number):
                 sql = "UPDATE data_twitter_detalle SET polarity=%s,subjectivity=%s ,classification=%s ,p_pos=%s ,p_neg=%s WHERE id = %s"
                 bd.execute(sql, (polarity, subjectivity, analysis2.sentiment.classification,analysis2.sentiment.p_pos,analysis2.sentiment.p_neg, tweet.id))     
             else:
-                sql = "INSERT INTO data_twitter_detalle VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
+                sql = "INSERT INTO data_twitter_detalle VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"
                 if (tweet._json['place']):
                     bd.execute(sql, (tweet._json['id_str'],
                                 tweet._json['user']['id_str'],
                                 text,
+                                tweet._json['created_at'],
                                 tweet._json['place']['place_type'],
                                 tweet._json['place']['name'],
                                 polarity,
                                 subjectivity,
                                 analysis2.sentiment.classification,
                                 analysis2.sentiment.p_pos,
-                                analysis2.sentiment.p_neg
+                                analysis2.sentiment.p_neg,
+                                ""
                                 ))
                 else:
                     bd.execute(sql, (tweet._json['id_str'],
                                 tweet._json['user']['id_str'],
                                 text,
+                                tweet._json['created_at'],
                                 "",
                                 "",
                                 polarity,
                                 subjectivity,
                                 analysis2.sentiment.classification,
                                 analysis2.sentiment.p_pos,
-                                analysis2.sentiment.p_neg
+                                analysis2.sentiment.p_neg,
+                                ""
                                 ))
             connection.commit()
         except tweepy.TweepError as e:
@@ -191,13 +215,11 @@ def get_all_tweets(screen_name, limit_number):
 
 
 
-    ## TO DO: REFACTOR THIS
+    #TODO: REFACTOR THIS
     
     for tweet in mentions:
         try:
-            text = emoji_pattern.sub(r'', tweet._json['text'])
-            text = re.sub(r'\w+:\/{2}[\d\w-]+(\.[\d\w-]+)*(?:(?:\/[^\s/]*))*', '', text)
-            text = traductor.translate(text, src="es", dest='en').text
+            text = filter_text(tweet._json['text'], emoji_pattern, traductor)
             analysis = TextBlob(text)
             analysis2 = tb(text)
             # https://textblob.readthedocs.io/en/dev/quickstart.html#sentiment-analysis
@@ -214,11 +236,12 @@ def get_all_tweets(screen_name, limit_number):
                 sql = "UPDATE data_twitter_detalle SET polarity=%s,subjectivity=%s ,classification=%s ,p_pos=%s ,p_neg=%s, is_mentioned=%s WHERE id = %s"
                 bd.execute(sql, (polarity, subjectivity, analysis2.sentiment.classification,analysis2.sentiment.p_pos,analysis2.sentiment.p_neg, screen_name, tweet.id))     
             else:
-                sql = "INSERT INTO data_twitter_detalle VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
+                sql = "INSERT INTO data_twitter_detalle VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)"
                 if (tweet._json['place']):
                     bd.execute(sql, (tweet._json['id_str'],
                                 tweet._json['user']['id_str'],
                                 text,
+                                tweet._json['created_at'],
                                 tweet._json['place']['place_type'],
                                 tweet._json['place']['name'],
                                 polarity,
@@ -232,6 +255,7 @@ def get_all_tweets(screen_name, limit_number):
                     bd.execute(sql, (tweet._json['id_str'],
                                 tweet._json['user']['id_str'],
                                 text,
+                                tweet._json['created_at'],
                                 "",
                                 "",
                                 polarity,
