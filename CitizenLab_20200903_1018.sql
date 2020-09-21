@@ -153,7 +153,7 @@ CREATE TABLE `redes_sociales` (
 
 LOCK TABLES `redes_sociales` WRITE;
 /*!40000 ALTER TABLE `redes_sociales` DISABLE KEYS */;
-INSERT INTO `redes_sociales` VALUES (1,'Twiiter','2020-07-28 23:51:00','2020-07-28 23:51:00'),(2,'Facebook','2020-07-28 23:51:09','2020-07-28 23:51:09'),(3,'Instagram','2020-07-28 23:51:17','2020-07-28 23:51:17');
+INSERT INTO `redes_sociales` VALUES (1,'Twitter','2020-07-28 23:51:00','2020-07-28 23:51:00'),(2,'Facebook','2020-07-28 23:51:09','2020-07-28 23:51:09'),(3,'Instagram','2020-07-28 23:51:17','2020-07-28 23:51:17');
 /*!40000 ALTER TABLE `redes_sociales` ENABLE KEYS */;
 UNLOCK TABLES;
 

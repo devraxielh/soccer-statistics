@@ -56,15 +56,6 @@ $(function() {
                 console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
             });
 
-            .done(function( data, textStatus, jqXHR ) {
-                $("#load").hide();
-                $("#details").show();
-                graficar_frecuencias(data);
-            })
-            .fail(function( jqXHR, textStatus, errorThrown ) {
-                console.log( "La solicitud ha fallado: " +  textStatus + " "+ errorThrown);
-            });
-
         $.ajax({
             data: {"cuenta" : $( "#red_social" ).val()},
             type: "POST",

@@ -7,10 +7,35 @@ from Dashboard.conexion import getConnection
 from googletrans import Translator
 import pprint
 import re
+import numpy as np
+from matplotlib.backends.backend_agg import FigureCanvasAgg
+from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
+import pandas as pd
+from flask import send_file
+
 consumer_key = "F70Tuo2dL0e08mgLU7QTSP9R9"
 consumer_secret = "I8jKWmBnq2qOlGVnRKintRztIL79q53YDmMUZV5phWpKW9SnBP"
 access_key = "92553187-VF6nsdE1SLFglseQ2DMUBoGIb6ZxQ5FrdgmbM2ioD"
 access_secret = "izY6ndERijvjOnHLz3e7TIjbAGJj2qlGj5aTf6ZSpoCuW"
+
+def get_correlation(screen_name):
+    """
+    TODO: Add correct data to this
+    """
+    df = pd.DataFrame({'a': np.random.randint(0, 50, 1000)})
+    df['b'] = df['a'] + np.random.normal(0, 10, 1000) # positively correlated with 'a'
+    df['c'] = 100 - df['a'] + np.random.normal(0, 5, 1000) # negatively correlated with 'a'
+    df['d'] = np.random.randint(0, 50, 1000) # not correlated with 'a'
+
+    plt.matshow(df.corr())
+    plt.xticks(range(len(df.columns)), df.columns)
+    plt.yticks(range(len(df.columns)), df.columns)
+    plt.colorbar()
+    
+    send_file(plt, mimetype='image/gif')
+
+
 
 def get_all_tweets(screen_name, limit_number):
     traductor = Translator()
